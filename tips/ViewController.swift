@@ -23,9 +23,19 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        //load the bill
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
+        var billText = defaults.objectForKey("bill") as? String
+        
+        //update the bill
+        if billText != ""{
+            billField.text = billText
+            onEditingChanged(billField)
+        }else{
         tipLabel.text = "$0.00"
         totalLabel.text = "$0.00"
-        
+        }
     }
     
     //animate loading and closing views
@@ -75,9 +85,15 @@ class ViewController: UIViewController {
     }
     @IBAction func onEditingChanged(sender: AnyObject) {
         let selected = tipControl.selectedSegmentIndex
-        
+        //the text from the textbox
+        let billstring:String = NSString(string: billField.text!) as String
         //get the bill amount
         let billAmnt = NSString(string: billField.text!).doubleValue
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        //save the bill amount
+        defaults.setObject(billstring, forKey: "bill")
+
         
         let tip = billAmnt * tipPercentages[selected]
         let total = billAmnt + tip
