@@ -33,8 +33,8 @@ class ViewController: UIViewController {
             billField.text = billText
             onEditingChanged(billField)
         }else{
-        tipLabel.text = "$0.00"
-        totalLabel.text = "$0.00"
+            billField.text = "0.00"
+            onEditingChanged(billField)
         }
     }
     
@@ -84,6 +84,9 @@ class ViewController: UIViewController {
         view.endEditing(true)
     }
     @IBAction func onEditingChanged(sender: AnyObject) {
+        //number formatter for the currency
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .CurrencyStyle
         let selected = tipControl.selectedSegmentIndex
         //the text from the textbox
         let billstring:String = NSString(string: billField.text!) as String
@@ -98,11 +101,8 @@ class ViewController: UIViewController {
         let tip = billAmnt * tipPercentages[selected]
         let total = billAmnt + tip
         
-        tipLabel.text = "$\(tip)"
-        totalLabel.text = "$\(total)"
-        
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        tipLabel.text = formatter.stringFromNumber(tip)
+        totalLabel.text = formatter.stringFromNumber(total)
     }
 
 }
